@@ -1,0 +1,52 @@
+﻿
+@model BuildingDescription
+@{
+    ViewData["Title"] = "Редактирование информации о доме";
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-8">
+        <div class="card p-3 mb-3">
+            <h5>Редактирование информации о доме</h5>
+            <small>Для недвижимости #@Model.PropertyId</small>
+            <hr />
+            <form>
+                <input type="hidden" asp-for="PropertyId"/>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="NumberOfFloors" class="input-group-text" style="width: 130px"></label>
+                    </div>
+                    <input asp-for="NumberOfFloors" asp-placeholder-for="NumberOfFloors" class="form-control" />
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="BuildYear" class="input-group-text" style="width: 130px"></label>
+                    </div>
+                    <input asp-for="BuildYear" asp-placeholder-for="BuildYear" class="form-control" />
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Parking" class="input-group-text" style="width: 130px"></label>
+                    </div>
+                    <select asp-for="Parking" class="form-control">
+                        <option value="">Не указано</option>
+                        <option value="true">Есть</option>
+                        <option value="false">Нет</option>
+                    </select>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Elevator" class="input-group-text" style="width: 130px"></label>
+                    </div>
+                    <select asp-for="Elevator" class="form-control">
+                        <option value="">Не указано</option>
+                        <option value="true">Есть</option>
+                        <option value="false">Нет</option>
+                    </select>
+                </div>
+                <hr/>
+                <button asp-action="EditBuildingDescription" formmethod="post" class="btn btn-info">Сохранить</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿
+@model ApartmentDescription
+@{
+    ViewData["Title"] = "Редактирование информации о квартире";
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-8">
+        <div class="card p-3 mb-3">
+            <h5>Редактирование информации о квартире</h5>
+            <small>Для недвижимости #@Model.PropertyId</small>
+            <hr />
+            <form>
+                <input type="hidden" asp-for="PropertyId" />
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Area" class="input-group-text" style="width: 130px"></label>
+                    </div>
+                    <input asp-for="Area" asp-placeholder-for="Area" class="form-control" />
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="NumberOfRooms" class="input-group-text" style="width: 130px"></label>
+                    </div>
+                    <input asp-for="NumberOfRooms" asp-placeholder-for="NumberOfRooms" class="form-control" />
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Balcony" class="input-group-text" style="width: 130px"></label>
+                    </div>
+                    <select asp-for="Balcony" class="form-control">
+                        <option value="">Не указано</option>
+                        <option value="true">Есть</option>
+                        <option value="false">Нет</option>
+                    </select>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Floor" class="input-group-text" style="width: 130px"></label>
+                    </div>
+                    <input asp-for="Floor" asp-placeholder-for="Floor" class="form-control" />
+                </div>
+                <hr />
+                <button asp-action="EditApartmentDescription" formmethod="post" class="btn btn-info">Сохранить</button>
+            </form>
+        </div>
+    </div>
+</div>

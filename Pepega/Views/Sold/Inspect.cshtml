@@ -1,0 +1,77 @@
+﻿@using System.Globalization
+@model Pepega.Controllers.SoldController.InspectModel
+@{
+    ViewData["Title"] = "Продажа " + Model.Sold.SellOrder.Number;
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-8">
+        <div class="card mb-2">
+            <div class="card-body">
+                <table class="table mb-0">
+                    <tbody>
+                    <tr>
+                        <th colspan="2">
+                            <span class="h4">Продажа <a asp-controller="SellOrder" asp-action="Inspect" asp-route-id="@Model.Sold.SellOrderId">@Model.Sold.SellOrder.Number</a></span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="row">Цена сделки</th>
+                        <td>
+                                @((Model.Sold.FinalPrice + Model.Sold.Income + Model.Sold.IncomeManager).ToString("N0"))
+                            тыс. руб.</td>
+                    </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.Sold.FinalPrice)</th>
+                            <td>@Model.Sold.FinalPrice.ToString("N0") тыс. руб.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.Sold.Income)</th>
+                            <td>@Model.Sold.Income.ToString("N0") тыс.руб. </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.Sold.IncomeManager)</th>
+                            <td>@Model.Sold.IncomeManager.ToString("N0") тыс.руб. </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.Sold.Date)</th>
+                            <td>@Model.Sold.Date.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4>Покупатели</h4>
+                <hr/>
+                <form asp-action="AddBuyer" method="post">
+                    <input type="hidden" asp-for="SellOrderId"/>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="ClientId" class="input-group-text" style="width: 150px"></label>
+                        </div>
+                        <input asp-for="ClientId" asp-placeholder-for="ClientId" class="form-control"/>
+                        <div class="invalid-feedback d-block">
+                            <span asp-validation-for="ClientId"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-info btn-sm">Добавить покупателя</button>
+                </form>
+                <hr/>
+                <table class="table table-borderless table-sm">
+                    <tbody>
+                    @foreach (var buyer in Model.Buyers)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-controller="Client" asp-action="Inspect" asp-route-id="@buyer.ClientId">#@buyer.ClientId @buyer.Client.LastName @buyer.Client.FirstName @buyer.Client.MiddleName</a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+﻿@using System.Globalization
+@model Pepega.Controllers.SoldController.IndexModel
+
+@{
+    ViewData["Title"] = "Продажи";
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-6">
+                <h3 class="mb-3">Продажи за период</h3>
+                <form asp-action="Index" method="get">
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text">От</label>
+                        </div>
+                        <input asp-for="From" class="form-control" />
+                    </div>
+
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text">По</label>
+                        </div>
+                        <input asp-for="To" name="To" placeholder="по" class="form-control" />
+                    </div>
+
+                    <button type="submit" class="btn btn-outline-info">Фильтровать</button>
+                </form>
+            </div>
+            <div class="col-6">
+                <h3 class="mb-3">Прибыль за период</h3>
+                <form asp-action="Report" method="get">
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text">От</label>
+                        </div>
+                        <input asp-for="From" class="form-control" />
+                    </div>
+
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text">По</label>
+                        </div>
+                        <input asp-for="To" name="To" placeholder="по" class="form-control" />
+                    </div>
+
+                    <button type="submit" class="btn btn-outline-info">Составить репорт</button>
+                </form>
+            </div>
+            </div>
+            <hr />
+            <table class="table table-bordered table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Номер договора</th>
+                        <th scope="col">Цена сделки</th>
+                        <th scope="col">Прибыль</th>
+                        <th scope="col" style="width: 200px">Дата</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sold in Model.Solds)
+                    {
+                        <tr onclick="window.open('@Url.Action("Inspect", new {id = sold.SellOrderId})')">
+                            <td>@sold.SellOrder.Number</td>
+                            <td>@((sold.FinalPrice + sold.Income + sold.IncomeManager).ToString("N0")) тыс.руб.</td>
+                            <td>@sold.Income.ToString("N0") тыс. руб.</td>
+                            <td>@sold.Date.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+</div>

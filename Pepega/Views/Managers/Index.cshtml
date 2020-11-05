@@ -1,0 +1,55 @@
+﻿@using System.Globalization
+@model Pepega.Controllers.ManagerIndexModel
+
+@{
+    ViewData["Title"] = "Менеджеры";
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-12">
+        <h3>Менеджеры</h3>
+        <hr />
+        <div class="row">
+            <div class="col-3">
+                <a class="btn btn-info btn-block" asp-action="Create">Добавить менеджера</a>
+            </div>
+        </div>
+        <hr/>
+        <h4>Лучший менеджер за прошлый месяц</h4>
+        <p>
+            @{
+                if (Model.TopManager != null)
+                {
+                    var topManager = Model.Managers.First(e => e.ManagerId == Model.TopManager.ManagerId);
+                    <a asp-action="Details" asp-route-id="@topManager.ManagerId">@topManager.LastName @topManager.FirstName @topManager.MiddleName</a> @:заработал агенству @Model.TopManager.Income.ToString("N0") тыс. руб.
+                }
+                else
+                {
+                    @:Нет продаж за прошлый месяц
+                }
+                }
+            </p>
+        <hr />
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col" style="width: 70px">#</th>
+                    <th scope="col">ФИО</th>
+                    <th scope="col" style="width: 200px">Город</th>
+                    <th scope="col" style="width: 250px">Дата приема на работу</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var manager in Model.Managers)
+                {
+                    <tr onclick="window.open('@Url.Action("Details", new {id = manager.ManagerId})')">
+                        <th scope="row">@manager.ManagerId</th>
+                        <td>@manager.LastName @manager.FirstName @manager.MiddleName</td>
+                        <td>@manager.City.Name</td>
+                        <td>@manager.JoinDate.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

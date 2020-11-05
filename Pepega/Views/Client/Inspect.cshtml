@@ -1,0 +1,87 @@
+﻿@using System.Globalization
+@model Client
+@{
+    ViewData["Title"] = "Клиент №" + Model.ClientId;
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-8">
+        <div class="card">
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th colspan="2">
+                                <span class="h4">Клиент №@Model.ClientId</span>
+                                <hr />
+                                <form asp-action="Delete" asp-route-id="@Model.ClientId">
+                                    <a asp-action="Edit" asp-route-id="@Model.ClientId" class="btn btn-outline-info"><i class="fas fa-edit fa-fw"></i></a>
+                                    <button type="submit" class="btn btn-outline-info"><i class="fas fa-trash-alt  fa-fw"></i></button>
+                                </form>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.RegistrationDate)</th>
+                            <td>@Model.RegistrationDate.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.LastName)</th>
+                            <td>@Model.LastName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.FirstName)</th>
+                            <td>@Model.FirstName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.MiddleName)</th>
+                            <td>@Model.MiddleName</td>
+                        </tr>
+                    <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.BirthDate)</th>
+                            <td>@Model.BirthDate.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.PassportNumber)</th>
+                            <td>@Model.PassportNumber</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.PhoneNumber)</th>
+                            <td>@Model.PhoneNumber</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <h4>Участие в продажах</h4>
+                        <hr />
+                        <table class="table table-borderless table-sm">
+                            @foreach (var seller in Model.Sellers)
+                            {
+                                <tr>
+                                    <td><a asp-controller="SellOrder" asp-action="Inspect" asp-route-id="@seller.SellOrderId">@seller.SellOrder.Number</a></td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                    <div class="col-6">
+                        <h4>Участие в покупках</h4>
+                        <hr />
+                        <table class="table table-borderless table-sm">
+                            @foreach (var buyer in Model.Buyers)
+                            {
+                                <tr>
+                                    <td><a asp-controller="Sold" asp-action="Inspect" asp-route-id="@buyer.SellOrderId">@buyer.SellOrder.Number</a></td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>

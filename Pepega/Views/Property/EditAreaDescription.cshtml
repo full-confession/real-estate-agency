@@ -1,0 +1,56 @@
+﻿
+@model AreaDescription
+@{
+    ViewData["Title"] = "Редактирование информации об участке";
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-8">
+        <div class="card p-3 mb-3">
+            <h5>Редактирование информации об участке</h5>
+            <small>Для недвижимости #@Model.PropertyId</small>
+            <hr />
+            <form>
+                <input type="hidden" asp-for="PropertyId"/>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Area" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="Area" asp-placeholder-for="Area" class="form-control"/>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Electricity" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <select asp-for="Electricity" class="form-control">
+                        <option value="">Не указано</option>
+                        <option value="true">Есть</option>
+                        <option value="false">Нет</option>
+                    </select>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Water" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <select asp-for="Water" class="form-control">
+                        <option value="">Не указано</option>
+                        <option value="true">Есть</option>
+                        <option value="false">Нет</option>
+                    </select>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="FertileSoil" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <select asp-for="FertileSoil" class="form-control">
+                        <option value="">Не указано</option>
+                        <option value="true">Есть</option>
+                        <option value="false">Нет</option>
+                    </select>
+                </div>
+                <hr/>
+                <button asp-action="EditAreaDescription" formmethod="post" class="btn btn-info">Сохранить</button>
+            </form>
+        </div>
+    </div>
+</div>

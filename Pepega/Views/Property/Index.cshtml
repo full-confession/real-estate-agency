@@ -1,0 +1,389 @@
+﻿@using System.Globalization
+@model Pepega.Controllers.IndexModel
+@{
+    ViewData["Title"] = "Недвижимость";
+}
+    <form id="filterForm" asp-action="Index" method="get">
+        <input type="hidden" id="filterPageIndex" asp-for="FilterModel.PageIndex" />
+        @*<input type="hidden" id="filterPageSize" asp-for="FilterModel.PageSize" />*@
+        <div class="row">
+            <div class="col-3">
+                <h5>Тип</h5>
+
+                <hr />
+                <select asp-for="FilterModel.PropertyTypeId" asp-items="@Model.PropertyTypeList" class="form-control form-control-sm from-reset">
+                    <option selected="selected" value="">Не указано</option>
+                </select>
+                <hr />
+                <a class="btn btn-info btn-block" asp-action="Create">Добавить недвижимость</a>
+            </div>
+            <div class="col-3">
+                <h5>Адрес</h5>
+                <hr />
+                <div style="height: 150px;">
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.CityId" class="input-group-text" style="width: 70px"></label>
+                        </div>
+                        <select asp-for="FilterModel.CityId" asp-items="Model.CityList" id="citySelect" class="form-control">
+                            <option selected="selected" value="">Город</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.DistrictId" class="input-group-text" style="width: 70px"></label>
+                        </div>
+                        @if (Model.FilterModel.CityId.HasValue)
+                        {
+                            <select asp-for="FilterModel.DistrictId" asp-items="Model.DistrictList" id="districtSelect" class="form-control">
+                                <option selected="selected" value="">Район</option>
+                            </select>
+                        }
+                        else
+                        {
+                            <select asp-for="FilterModel.DistrictId" asp-items="Model.DistrictList" id="districtSelect" class="form-control" disabled="disabled">
+                                <option selected="selected" value="">Район</option>
+                            </select>
+                        }
+                    </div>
+
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.StreetId" class="input-group-text" style="width: 70px"></label>
+                        </div>
+                        @if (Model.FilterModel.DistrictId.HasValue)
+                        {
+                            <select asp-for="FilterModel.StreetId" asp-items="Model.StreetList" id="streetSelect" class="form-control">
+                                <option selected="selected" value="">Улица</option>
+                            </select>
+                        }
+                        else
+                        {
+                            <select asp-for="FilterModel.StreetId" asp-items="Model.StreetList"  id="streetSelect" class="form-control" disabled="disabled">
+                                <option selected="selected" value="">Улица</option>
+                            </select>
+                        }
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.HouseId" class="input-group-text" style="width: 70px"></label>
+                        </div>
+                        @if (Model.FilterModel.StreetId.HasValue)
+                        {
+                            <input asp-for="FilterModel.HouseId" id="houseInput" asp-placeholder-for="FilterModel.HouseId" class="form-control from-reset"/>
+                        }
+                        else
+                        {
+                            <input asp-for="FilterModel.HouseId" id="houseInput" asp-placeholder-for="FilterModel.HouseId" class="form-control from-reset" disabled="disabled" />
+                        }
+                    </div>
+                </div>
+                <hr />
+            </div>
+            <div class="col-6">
+                <h5>Дополнительные параметры</h5>
+                <hr />
+                <div style="height: 150px; overflow-y: scroll; padding-right: 10px">
+                    <h6>Об участке</h6>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.AreaFilter.AreaFrom" class="input-group-text" style="width: 120px"></label>
+                        </div>
+                        <input asp-for="FilterModel.AreaFilter.AreaFrom" placeholder="От" class="form-control from-reset" />
+                        <input asp-for="FilterModel.AreaFilter.AreaTo" placeholder="По" class="form-control from-reset" />
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.AreaFilter.Electricity" class="input-group-text" style="width: 120px"></label>
+                        </div>
+                        <select asp-for="FilterModel.AreaFilter.Electricity" asp-items="@Model.BoolTypeList" class="form-control from-reset">
+                            <option selected="selected" value="">Не указано</option>
+                        </select>
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.AreaFilter.Water" class="input-group-text" style="width: 120px"></label>
+                        </div>
+                        <select asp-for="FilterModel.AreaFilter.Water" asp-items="@Model.BoolTypeList" class="form-control from-reset">
+                            <option selected="selected" value="">Не указано</option>
+                        </select>
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.AreaFilter.FertileSoil" class="input-group-text" style="width: 120px"></label>
+                        </div>
+                        <select asp-for="FilterModel.AreaFilter.FertileSoil" asp-items="@Model.BoolTypeList" class="form-control from-reset">
+                            <option selected="selected" value="">Не указано</option>
+                        </select>
+                    </div>
+                    <h6>О доме</h6>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.BuildingFilter.NumberOfFloorsFrom" class="input-group-text" style="width: 120px"></label>
+                        </div>
+                        <input asp-for="FilterModel.BuildingFilter.NumberOfFloorsFrom" placeholder="От" class="form-control from-reset" />
+                        <input asp-for="FilterModel.BuildingFilter.NumberOfFloorsTo" placeholder="По" class="form-control from-reset" />
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.BuildingFilter.BuildYearFrom" class="input-group-text" style="width: 120px"></label>
+                        </div>
+                        <input asp-for="FilterModel.BuildingFilter.BuildYearFrom" placeholder="От" class="form-control from-reset" />
+                        <input asp-for="FilterModel.BuildingFilter.BuildYearTo" placeholder="По" class="form-control from-reset" />
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.BuildingFilter.Parking" class="input-group-text" style="width: 120px"></label>
+                        </div>
+                        <select asp-for="FilterModel.BuildingFilter.Parking" asp-items="@Model.BoolTypeList" class="form-control from-reset">
+                            <option selected="selected" value="">Не указано</option>
+                        </select>
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.BuildingFilter.Elevator" class="input-group-text" style="width: 120px"></label>
+                        </div>
+                        <select asp-for="FilterModel.BuildingFilter.Elevator" asp-items="@Model.BoolTypeList" class="form-control from-reset">
+                            <option selected="selected" value="">Не указано</option>
+                        </select>
+                    </div>
+                    <h6>О квартире</h6>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.ApartmentFilter.NumberOfRoomsFrom" class="input-group-text" style="width: 120px"></label>
+                        </div> 
+                        <input asp-for="FilterModel.ApartmentFilter.NumberOfRoomsFrom" placeholder="От" class="form-control from-reset" />
+                        <input asp-for="FilterModel.ApartmentFilter.NumberOfRoomsTo" placeholder="По" class="form-control from-reset" />
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.ApartmentFilter.AreaFrom" class="input-group-text" style="width: 120px"></label>
+                        </div>
+                        <input asp-for="FilterModel.ApartmentFilter.AreaFrom" placeholder="От" class="form-control from-reset" />
+                        <input asp-for="FilterModel.ApartmentFilter.AreaTo" placeholder="По" class="form-control from-reset" />
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.ApartmentFilter.Balcony" class="input-group-text" style="width: 120px"></label>
+                        </div>
+                        <select asp-for="FilterModel.ApartmentFilter.Balcony" asp-items="@Model.BoolTypeList" class="form-control from-reset">
+                            <option selected="selected" value="">Не указано</option>
+                        </select>
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="FilterModel.ApartmentFilter.FloorFrom" class="input-group-text" style="width: 120px"></label>
+                        </div>
+                        <input asp-for="FilterModel.ApartmentFilter.FloorFrom" placeholder="От" class="form-control from-reset" />
+                        <input asp-for="FilterModel.ApartmentFilter.FloorTo" placeholder="По" class="form-control from-reset" />
+                    </div>
+                </div>
+                <hr />
+            </div>
+        </div>
+        <div class="d-flex align-items-center mb-2">
+            <button type="button" class="btn btn-info mr-3" onclick="ApplyFilters()">Фильтровать</button>
+            <button type="button" class="btn btn-light mr-3" onclick="Clear()">Сбросить фильтры</button>
+
+            <div class="input-group" style="width: 300px;">
+                <div class="input-group-prepend">
+                    <label class="input-group-text">Записей на странице</label>
+                </div>
+                <select asp-for="FilterModel.PageSize" class="form-control" style="width: 80px; flex: none">
+                    <option selected="selected" value="10">10</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+            <div>
+                Выбрано @Model.Pagination.Selected из @Model.Pagination.TotalEntries записей
+            </div>
+        </div>
+        <nav>
+            <ul class="pagination">
+                <li class="page-item page-link" onclick="GoToPage(1)">
+                    <i class="fas fa-angle-double-left fa-fw"></i>
+                </li>
+                <li class="page-item page-link" onclick="GoToPage(@(Model.FilterModel.PageIndex - 1))">
+                    <i class="fas fa-angle-left fa-fw"></i>
+                </li>
+                <li class="page-item page-link" style="width: 50px; text-align: center;">
+                    <b>@Model.FilterModel.PageIndex</b>
+                </li>
+                <li class="page-item page-link" onclick="GoToPage(@(Model.FilterModel.PageIndex + 1))">
+                    <i class="fas fa-angle-right fa-fw"></i>
+                </li>
+                <li class="page-item page-link" onclick="GoToPage(@Model.Pagination.PageCount)">
+                    <i class="fas fa-angle-double-right fa-fw"></i>
+                </li>
+            </ul>
+        </nav>
+    </form>
+<table class="table table-bordered table-hover">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col" style="width: 50px">#</th>
+            <th scope="col" style="width: 120px">Тип</th>
+            <th scope="col">Адрес</th>
+            <th scope="col" style="width: 300px">Фильтры</th>
+            <th scope="col" style="width: 170px">Дата добавления</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var property in Model.Properties)
+    {
+        <tr onclick="window.open('@Url.Action("Inspect", new {id = property.PropertyId})')">
+            <td>
+                @property.PropertyId
+            </td>
+            <td>
+                @property.PropertyType.Name
+            </td>
+            <td>
+                @property.Street.District.City.Name, @property.Street.District.Name, @property.Street.Name, д. @property.HouseNumber
+                @if (property.Housing != null)
+                {
+                    @:, корп. @property.Housing
+                }
+                @if(property.Building != null)
+                {
+                    @:, стр. @property.Building
+                }
+                @if(property.ApartmentNumber != null)
+                {
+                    @:, кв. @property.ApartmentNumber
+                }
+            </td>
+            <td>
+                <div class="d-flex flex-wrap">
+                    @if (Model.FilterModel.AreaFilter.AreaApplied && property.AreaDescription.Area.HasValue)
+                    {
+                        <div class="alert alert-success p-1 mr-1 mb-1">
+                            <small>
+                                <label asp-for="FilterModel.AreaFilter.AreaFrom" class="p-0 m-0"></label>:
+                                @property.AreaDescription.Area.Value
+                            </small>
+                        </div>
+                    }
+                    
+                    @if (Model.FilterModel.AreaFilter.ElectricityApplied && property.AreaDescription.Electricity.HasValue)
+                    {
+                        <div class="alert alert-success p-1 mr-1 mb-1">
+                            <small>
+                                <label asp-for="FilterModel.AreaFilter.Electricity" class="p-0 m-0"></label>:
+                                @(property.AreaDescription.Electricity.Value ? "Есть" : "Нет")
+                            </small>
+                        </div>
+                    }
+                    
+                    @if (Model.FilterModel.AreaFilter.WaterApplied && property.AreaDescription.Water.HasValue)
+                    {
+                        <div class="alert alert-success p-1 mr-1 mb-1">
+                            <small>
+                                <label asp-for="FilterModel.AreaFilter.Water" class="p-0 m-0"></label>:
+                                @(property.AreaDescription.Water.Value ? "Есть" : "Нет")
+                            </small>
+                        </div>
+                    }
+                    
+                    @if (Model.FilterModel.AreaFilter.FertileSoilApplied && property.AreaDescription.FertileSoil.HasValue)
+                    {
+                        <div class="alert alert-success p-1 mr-1 mb-1">
+                            <small>
+                                <label asp-for="FilterModel.AreaFilter.FertileSoil" class="p-0 m-0"></label>:
+                                @(property.AreaDescription.FertileSoil.Value ? "Есть" : "Нет")
+                            </small>
+                        </div>
+                    }
+                    
+
+                    @if (Model.FilterModel.BuildingFilter.BuildYearApplied && property.BuildingDescription.BuildYear.HasValue)
+                    {
+                        <div class="alert alert-info p-1 mr-1 mb-1">
+                            <small>
+                                <label asp-for="FilterModel.BuildingFilter.BuildYearFrom" class="p-0 m-0"></label>:
+                                @property.BuildingDescription.BuildYear.Value
+                            </small>
+                        </div>
+                    }
+
+                    @if (Model.FilterModel.BuildingFilter.NumberOfFloorsApplied && property.BuildingDescription.NumberOfFloors.HasValue)
+                    {
+                        <div class="alert alert-info p-1 mr-1 mb-1">
+                            <small>
+                                <label asp-for="FilterModel.BuildingFilter.NumberOfFloorsFrom" class="p-0 m-0"></label>:
+                                @property.BuildingDescription.NumberOfFloors.Value
+                            </small>
+                        </div>
+                    }
+
+                    @if (Model.FilterModel.BuildingFilter.ParkingApplied && property.BuildingDescription.Parking.HasValue)
+                    {
+                        <div class="alert alert-info p-1 mr-1 mb-1">
+                            <small>
+                                <label asp-for="FilterModel.BuildingFilter.Parking" class="p-0 m-0"></label>:
+                                @(property.BuildingDescription.Parking.Value ? "Есть" : "Нет")
+                            </small>
+                        </div>
+                    }
+
+                    @if (Model.FilterModel.BuildingFilter.ElevatorApplied && property.BuildingDescription.Elevator.HasValue)
+                    {
+                        <div class="alert alert-info p-1 mr-1 mb-1">
+                            <small>
+                                <label asp-for="FilterModel.BuildingFilter.Elevator" class="p-0 m-0"></label>:
+                                @(property.BuildingDescription.Elevator.Value ? "Есть" : "Нет")
+                            </small>
+                        </div>
+                    }
+
+                    @if (Model.FilterModel.ApartmentFilter.NumberOfRoomsApplied && property.ApartmentDescription.NumberOfRooms.HasValue)
+                    {
+                        <div class="alert alert-warning p-1 mr-1 mb-1">
+                            <small>
+                                <label asp-for="FilterModel.ApartmentFilter.NumberOfRoomsFrom" class="p-0 m-0"></label>:
+                                @property.ApartmentDescription.NumberOfRooms.Value
+                            </small>
+                        </div>
+                    }
+
+                    @if (Model.FilterModel.ApartmentFilter.AreaApplied && property.ApartmentDescription.Area.HasValue)
+                    {
+                        <div class="alert alert-warning p-1 mr-1 mb-1">
+                            <small>
+                                <label asp-for="FilterModel.ApartmentFilter.AreaFrom" class="p-0 m-0"></label>:
+                                @property.ApartmentDescription.Area.Value
+                            </small>
+                        </div>
+                    }
+
+                    @if (Model.FilterModel.ApartmentFilter.BalconyApplied && property.ApartmentDescription.Balcony.HasValue)
+                    {
+                        <div class="alert alert-warning p-1 mr-1 mb-1">
+                            <small>
+                                <label asp-for="FilterModel.ApartmentFilter.Balcony" class="p-0 m-0"></label>:
+                                @(property.ApartmentDescription.Balcony.Value ? "Есть" : "Нет")
+                            </small>
+                        </div>
+                    }
+
+                    @if (Model.FilterModel.ApartmentFilter.FloorApplied && property.ApartmentDescription.Floor.HasValue)
+                    {
+                        <div class="alert alert-warning p-1 mr-1 mb-1">
+                            <small>
+                                <label asp-for="FilterModel.ApartmentFilter.FloorFrom" class="p-0 m-0"></label>:
+                                @property.ApartmentDescription.Floor.Value
+                            </small>
+                        </div>
+                    }
+                </div>
+            </td>
+            <td>
+                @property.CreationDate.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+

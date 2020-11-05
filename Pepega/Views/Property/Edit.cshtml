@@ -1,0 +1,241 @@
+﻿@using System.Globalization
+@model Pepega.Controllers.PropertyEditModel
+@{
+    ViewData["Title"] = "Редактирование недвижимости";
+}
+
+
+<div class="row justify-content-md-center">
+    <div class="col-8">
+        <form>
+            <input type="hidden" asp-for="Property.PropertyId" />
+            <input type="hidden" asp-for="Property.CreationDate" />
+            <div class="card p-3 mb-3">
+                <h5>Редактирование недвижимости #@Model.Property.PropertyId</h5>
+                <small>Дата добавления: @Model.Property.CreationDate.ToString("dd MMM yyyy hh:mm", new CultureInfo("ru-RU"))</small>
+                <hr />
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.PropertyTypeId" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <select asp-for="Property.PropertyTypeId" asp-items="Model.PropertyTypeList" class="form-control"></select>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.Street.District.City" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <select id="citySelect" asp-items="Model.CityList" class="form-control"></select>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.Street.District" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <select id="districtSelect" asp-items="Model.DistrictList" class="form-control"></select>
+                </div>
+
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.Street" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <select id="streetSelect" asp-for="Property.StreetId" asp-items="Model.StreetList" class="form-control"></select>
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="Property.StreetId"></span>
+                    </div>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.HouseNumber" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="Property.HouseNumber" asp-placeholder-for="Property.HouseNumber" class="form-control" />
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="Property.HouseNumber"></span>
+                    </div>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.Housing" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="Property.Housing" asp-placeholder-for="Property.Housing" class="form-control" />
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.Building" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="Property.Building" asp-placeholder-for="Property.Building" class="form-control" />
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.ApartmentNumber" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="Property.ApartmentNumber" asp-placeholder-for="Property.ApartmentNumber" class="form-control" />
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.Number" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="Property.Number" asp-placeholder-for="Property.Number" class="form-control" />
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="Property.Number"></span>
+                    </div>
+                </div>
+            </div>
+
+            @*@if (Model.Property.AreaDescription != null)
+            {
+                <div class="card p-3 mb-3">
+                    <div class="d-flex flex-row justify-content-between">
+                        <h5 class="d-inline m-0">Об участке</h5>
+                        <button type="submit" formmethod="get" asp-action="RemoveAreaDescription" asp-route-view="Edit" class="p-0" style="border: none; background-color: transparent"><i class="fas fa-minus-square"></i></button>
+                    </div>
+                    <hr />
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Property.AreaDescription.Area" class="input-group-text" style="width: 150px"></label>
+                        </div>
+                        <input asp-for="Property.AreaDescription.Area" asp-placeholder-for="Property.AreaDescription.Area" class="form-control" />
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Property.AreaDescription.Electricity" class="input-group-text" style="width: 150px"></label>
+                        </div>
+                        <select asp-for="Property.AreaDescription.Electricity" class="form-control">
+                            <option value="">Не указано</option>
+                            <option value="true">Есть</option>
+                            <option value="false">Нет</option>
+                        </select>
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Property.AreaDescription.Water" class="input-group-text" style="width: 150px"></label>
+                        </div>
+                        <select asp-for="Property.AreaDescription.Water" class="form-control">
+                            <option value="">Не указано</option>
+                            <option value="true">Есть</option>
+                            <option value="false">Нет</option>
+                        </select>
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Property.AreaDescription.FertileSoil" class="input-group-text" style="width: 150px"></label>
+                        </div>
+                        <select asp-for="Property.AreaDescription.FertileSoil" class="form-control">
+                            <option value="">Не указано</option>
+                            <option value="true">Есть</option>
+                            <option value="false">Нет</option>
+                        </select>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card p-3 mb-3">
+                    <div class="d-flex flex-row justify-content-between">
+                        <h5 class="d-inline m-0">Об участке</h5>
+                        <button type="submit" formmethod="get" asp-action="AddAreaDescription" class="p-0" style="border: none; background-color: transparent"><i class="fas fa-plus-square"></i></button>
+                    </div>
+                </div>
+            }
+
+            @if (Model.Property.BuildingDescription != null)
+            {
+                <div class="card p-3 mb-3">
+                    <div class="d-flex flex-row justify-content-between">
+                        <h5 class="d-inline m-0">О доме</h5>
+                        <button type="submit" formmethod="get" asp-action="RemoveBuildingDescription" asp-route-view="Edit" class="p-0" style="border: none; background-color: transparent"><i class="fas fa-minus-square"></i></button>
+                    </div>
+                    <hr />
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Property.BuildingDescription.NumberOfFloors" class="input-group-text" style="width: 130px"></label>
+                        </div>
+                        <input asp-for="Property.BuildingDescription.NumberOfFloors" asp-placeholder-for="Property.BuildingDescription.NumberOfFloors" class="form-control" />
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Property.BuildingDescription.BuildYear" class="input-group-text" style="width: 130px"></label>
+                        </div>
+                        <input asp-for="Property.BuildingDescription.BuildYear" asp-placeholder-for="Property.BuildingDescription.BuildYear" class="form-control" />
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Property.BuildingDescription.Parking" class="input-group-text" style="width: 130px"></label>
+                        </div>
+                        <select asp-for="Property.BuildingDescription.Parking" class="form-control">
+                            <option value="">Не указано</option>
+                            <option value="true">Есть</option>
+                            <option value="false">Нет</option>
+                        </select>
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Property.BuildingDescription.Elevator" class="input-group-text" style="width: 130px"></label>
+                        </div>
+                        <select asp-for="Property.BuildingDescription.Elevator" class="form-control">
+                            <option value="">Не указано</option>
+                            <option value="true">Есть</option>
+                            <option value="false">Нет</option>
+                        </select>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card p-3 mb-3">
+                    <div class="d-flex flex-row justify-content-between">
+                        <h5 class="d-inline m-0">О доме</h5>
+                        <button type="submit" formmethod="get" asp-action="AddBuildingDescription" class="p-0" style="border: none; background-color: transparent"><i class="fas fa-plus-square"></i></button>
+                    </div>
+                </div>
+            }
+
+            @if (Model.Property.ApartmentDescription != null)
+            {
+                <div class="card p-3 mb-3">
+                    <div class="d-flex flex-row justify-content-between">
+                        <h5 class="d-inline m-0">О квартире</h5>
+                        <button type="submit" formmethod="get" asp-action="RemoveApartmentDescription" class="p-0" style="border: none; background-color: transparent"><i class="fas fa-minus-square"></i></button>
+                    </div>
+                    <hr />
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Property.ApartmentDescription.Area" class="input-group-text" style="width: 130px"></label>
+                        </div>
+                        <input asp-for="Property.ApartmentDescription.Area" asp-placeholder-for="Property.ApartmentDescription.Area" class="form-control" />
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Property.ApartmentDescription.NumberOfRooms" class="input-group-text" style="width: 130px"></label>
+                        </div>
+                        <input asp-for="Property.ApartmentDescription.NumberOfRooms" asp-placeholder-for="Property.ApartmentDescription.NumberOfRooms" class="form-control" />
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Property.ApartmentDescription.Balcony" class="input-group-text" style="width: 130px"></label>
+                        </div>
+                        <select asp-for="Property.ApartmentDescription.Balcony" class="form-control">
+                            <option value="">Не указано</option>
+                            <option value="true">Есть</option>
+                            <option value="false">Нет</option>
+                        </select>
+                    </div>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Property.ApartmentDescription.Floor" class="input-group-text" style="width: 130px"></label>
+                        </div>
+                        <input asp-for="Property.ApartmentDescription.Floor" asp-placeholder-for="Property.ApartmentDescription.Floor" class="form-control" />
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card p-3 mb-3">
+                    <div class="d-flex flex-row justify-content-between">
+                        <h5 class="d-inline m-0">О квартире</h5>
+                        <button type="submit" formmethod="get" asp-action="AddApartmentDescription" class="p-0" style="border: none; background-color: transparent"><i class="fas fa-plus-square"></i></button>
+                    </div>
+                </div>
+            }*@
+            <button asp-action="Edit" formmethod="post" class="btn btn-info">Сохранить</button>
+        </form>
+    </div>
+</div>

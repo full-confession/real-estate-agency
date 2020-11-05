@@ -1,0 +1,46 @@
+﻿@using System.Globalization
+@model Pepega.Controllers.SellOrderController.AddSellerModel
+@{
+    ViewData["Title"] = "Добавление продавца";
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-6">
+        <form>
+            <div class="card p-3 mb-3">
+                <h5>Добавление нового продавца</h5>
+                <hr />
+                
+                <input type="hidden" asp-for="SellOrderId"/>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="ClientId" class="input-group-text" style="width: 180px"></label>
+                    </div>
+                    <input asp-for="ClientId" asp-placeholder-for="ClientId" class="form-control" />
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="ClientId"></span>
+                    </div>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="OwnershipNumber" class="input-group-text" style="width: 180px"></label>
+                    </div>
+                    <input asp-for="OwnershipNumber" asp-placeholder-for="OwnershipNumber" class="form-control" />
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="OwnershipNumber"></span>
+                    </div>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="OwnershipIssueDate" class="input-group-text" style="width: 180px"></label>
+                    </div>
+                    <input asp-for="OwnershipIssueDate" asp-placeholder-for="OwnershipIssueDate" class="form-control" />
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="OwnershipIssueDate"></span>
+                    </div>
+                </div>
+                <button asp-action="AddSeller" formmethod="post" class="btn btn-info">Добавить</button>
+            </div>
+        </form>
+    </div>
+</div>

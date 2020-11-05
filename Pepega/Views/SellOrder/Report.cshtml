@@ -1,0 +1,94 @@
+﻿@using System.Globalization
+@model Pepega.Controllers.SellOrderController.ReportModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Репорт активности</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
+              crossorigin="anonymous"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    </environment>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+
+    <style type="text/css">
+        table {
+            page-break-inside: auto
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
+
+        thead {
+            display: table-header-group
+        }
+
+        tfoot {
+            display: table-footer-group
+        }
+    </style>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-10">
+            <h2>Активность</h2>
+            @if (!Model.From.HasValue && !Model.To.HasValue)
+            {
+                <small class="h4">За все время</small>
+            }
+            else if (Model.From.HasValue && !Model.To.HasValue)
+            {
+                <small class="h4">От @Model.From.Value.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</small>
+            }
+            else if (!Model.From.HasValue)
+            {
+                <small class="h4">По @Model.To.Value.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</small>
+            }
+            else
+            {
+                <small class="h4">От @Model.From.Value.ToString("dd MMM yyyy", new CultureInfo("ru-RU")) по @Model.To.Value.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</small>
+            }
+            <table class="table mt-3">
+                <thead>
+                <tr>
+
+                    <th scope="col">Дата изменения</th>
+                    <th scope="col">Номер договора</th>
+                    <th scope="col">Новый статус</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var sellOrderStatus in Model.Statuses)
+                {
+                    <tr>
+                        <td>@sellOrderStatus.SetDate</td>
+                        <td><a asp-controller="SellOrder" asp-action="Inspect" asp-route-id="@sellOrderStatus.SellOrderId">@sellOrderStatus.SellOrder.Number</a></td>
+                        <td class="table-@sellOrderStatus.Status.Style">@sellOrderStatus.Status.Name</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

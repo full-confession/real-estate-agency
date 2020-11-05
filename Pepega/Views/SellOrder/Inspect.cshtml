@@ -1,0 +1,134 @@
+﻿@using System.Globalization
+@model Pepega.Controllers.SellOrderInspectModel
+@{
+    ViewData["Title"] = "Договор о продаже №" + Model.SellOrder.PropertyId;
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-8 pb-3">
+        <div class="card">
+            <div class="card-body">
+                <table class="table mb-0">
+                    <tbody>
+                        <tr>
+                            <th colspan="2">
+                                <span class="h4">Договор о продаже @Model.SellOrder.Number</span>
+                                <hr />
+
+                                @if (Model.Statuses.First().Status.Name == "Создан")
+                                {
+                                    <a asp-action="AddSeller" asp-route-sellOrderId="@Model.SellOrder.SellOrderId" class="btn btn-outline-info">
+                                        Добавить продавца
+                                    </a>
+                                    <a asp-action="LockSellers" asp-route-sellOrderId="@Model.SellOrder.SellOrderId" class="btn btn-outline-info">
+                                        Отправить на проверку
+                                    </a>
+                                }
+                                else if (Model.Statuses.First().Status.Name == "На проверке")
+                                {
+                                    <a asp-action="Verify" asp-route-sellOrderId="@Model.SellOrder.SellOrderId" class="btn btn-outline-success">
+                                        Подтвердить
+                                    </a>
+                                    <a asp-action="Reject" asp-route-sellOrderId="@Model.SellOrder.SellOrderId" class="btn btn-outline-danger">
+                                        Закрыть
+                                    </a>
+                                }
+                                else if (Model.Statuses.First().Status.Name == "Активен")
+                                {
+                                    <a asp-action="Add" asp-controller="Sold" asp-route-sellOrderId="@Model.SellOrder.SellOrderId" class="btn btn-outline-success">
+                                        Завершить
+                                    </a>
+                                    <a asp-action="Reject" asp-route-sellOrderId="@Model.SellOrder.SellOrderId" class="btn btn-outline-danger">
+                                        Закрыть
+                                    </a>
+                                }
+                                else if (Model.Statuses.First().Status.Name == "Завершен")
+                                {
+                                    <a asp-action="Inspect" asp-controller="Sold" asp-route-id="@Model.SellOrder.SellOrderId" class="btn btn-outline-info">
+                                        Продажа
+                                    </a>
+                                }
+                            </th>
+
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.SellOrder.PropertyId)</th>
+                            <td>
+                                <a asp-controller="Property" asp-action="Inspect" asp-route-id="@Model.SellOrder.PropertyId">
+                                    #@Model.SellOrder.PropertyId
+                                    @Model.SellOrder.Property.Street.District.City.Name, @Model.SellOrder.Property.Street.District.Name, @Model.SellOrder.Property.Street.Name
+                                </a>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.SellOrder.ManagerId)</th>
+                            <td>
+                                <a asp-controller="Managers" asp-action="Details" asp-route-id="@Model.SellOrder.ManagerId">
+                                    #@Model.SellOrder.ManagerId
+                                    @Model.SellOrder.Manager.LastName @Model.SellOrder.Manager.FirstName @Model.SellOrder.Manager.MiddleName
+                                </a>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Продавцы</th>
+                            <td>
+                                <table class="table table-borderless table-sm">
+                                    <tbody>
+                                        @foreach (var seller in Model.Sellers)
+                                        {
+                                            <tr>
+                                                <td><a asp-controller="Client" asp-action="Inspect" asp-route-id="@seller.ClientId">#@seller.ClientId @seller.Client.LastName @seller.Client.FirstName @seller.Client.MiddleName</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-4"><small>Номер свидетельства: @seller.Ownership.Number</small></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-4"><small>Дата выдачи: @seller.Ownership.IssueDate.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</small></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.SellOrder.CreationDate)</th>
+                            <td>@Model.SellOrder.CreationDate.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.SellOrder.Price)</th>
+                            <td>@Model.SellOrder.Price.ToString("N0") тыс. руб.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.SellOrder.AgencyCharge)</th>
+                            <td>@Model.SellOrder.AgencyCharge.ToString("N0") тыс. руб.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.SellOrder.AgencyPercent)</th>
+                            <td>@Model.SellOrder.AgencyPercent %</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="card">
+            <div class="card-body">
+                <form>
+                    <table class="table">
+                        @foreach(var status in Model.Statuses)
+                        {
+                            <tr class="table-@status.Status.Style">
+                                <td>@status.Status.Name</td>
+                                <td>@status.SetDate</td>
+                            </tr>
+                        }
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

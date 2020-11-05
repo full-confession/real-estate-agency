@@ -1,0 +1,116 @@
+﻿@using System.Globalization
+@model Manager
+@{
+    ViewData["Title"] = "Менеджер №" + Model.ManagerId;
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-8">
+        <div class="card">
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th colspan="2">
+                                <span class="h4">Менеджер №@Model.ManagerId</span>
+                                <hr/>
+                                <a asp-action="Edit" asp-route-id="@Model.ManagerId" class="btn btn-outline-info"><i class="fas fa-edit fa-fw"></i></a>
+
+                            </th>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.LastName)</th>
+                            <td>@Model.LastName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.FirstName)</th>
+                            <td>@Model.FirstName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.MiddleName)</th>
+                            <td>@Model.MiddleName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.JoinDate)</th>
+                            <td>@Model.JoinDate.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.CityId)</th>
+                            <td>@Model.City.Name</td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.BirthDate)</th>
+                            <td>@Model.BirthDate.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.PassportNumber)</th>
+                            <td>@Model.PassportNumber</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.PhoneNumber)</th>
+                            <td>@Model.PhoneNumber</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">@Html.DisplayNameFor(e => e.OrderPercent)</th>
+                            <td>@Model.OrderPercent%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h4>Продажи</h4>
+                        <hr />
+                        <table class="table table-borderless table-sm">
+                            <tr>
+                                <th>Количество сделок: </th>
+                                <td>@Model.SellOrders.Count()</td>
+                            </tr>
+                            <tr>
+                                <th>Количество успешно заверешенных сделок: </th>
+                                <td>@Model.SellOrders.Count(e => e.Statuses.Last().Status.Name == "Завершен")</td>
+                            </tr>
+                            <tr>
+                                <th>Прибыль</th>
+                                <td>@Model.SellOrders.Sum(e => e.Sold?.IncomeManager ?? 0M).ToString("N0") тыс. руб.</td>
+                            </tr>
+                        </table>
+
+                        <hr />
+                        <div class="row">
+                            <div class="col-6">
+                                <h4>Активные</h4>
+                                <hr />
+                                <table class="table table-sm">
+                                    @foreach (var sellOrder in Model.SellOrders.Where(e => e.Statuses.Last().Status.Name != "Завершен" && e.Statuses.Last().Status.Name != "Прекращен"))
+                                    {
+                                        <tr class="table-@sellOrder.Statuses.Last().Status.Style">
+                                            <td><a asp-controller="SellOrder" asp-action="Inspect" asp-route-id="@sellOrder.SellOrderId">@sellOrder.Number</a></td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <h4>Завершенные</h4>
+                                <hr />
+                                <table class="table table-sm">
+                                    @foreach (var sellOrder in Model.SellOrders.Where(e => e.Statuses.Last().Status.Name == "Завершен" || e.Statuses.Last().Status.Name == "Прекращен"))
+                                    {
+                                        <tr class="table-@sellOrder.Statuses.Last().Status.Style">
+                                            <td><a asp-controller="SellOrder" asp-action="Inspect" asp-route-id="@sellOrder.SellOrderId">@sellOrder.Number</a></td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>

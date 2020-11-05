@@ -1,0 +1,32 @@
+﻿@using System.Globalization
+@model Pepega.Controllers.SoldController.AddModel
+@{
+    ViewData["Title"] = "Добавление продажи";
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-8">
+        <form>
+            <div class="card p-3 mb-3">
+                <h5>Продажа <a asp-action="Inspect" asp-controller="SellOrder" asp-route-id="@Model.SellOrderId">@Model.SellOrder.Number</a></h5>
+                <h6>Начальная цена: @Model.SellOrder.Price.ToString("N0") тыс.руб.</h6>
+                <hr />
+                <input type="hidden" asp-for="SellOrderId"/>
+
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="FinalPrice" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="FinalPrice" asp-placeholder-for="FinalPrice" class="form-control" />
+                    <div class="input-group-append">
+                        <span class="input-group-text">тыс. руб.</span>
+                    </div>
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="FinalPrice"></span>
+                    </div>
+                </div>
+                <button asp-action="Add" formmethod="post" class="btn btn-info">Добавить</button>
+            </div>
+        </form>
+    </div>
+</div>

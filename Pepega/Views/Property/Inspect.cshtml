@@ -1,0 +1,267 @@
+﻿@using System.Globalization
+@model Pepega.Controllers.PropertyInspectModel
+@{
+    ViewData["Title"] = "Недвижимость";
+}
+
+    <div class="row justify-content-md-center">
+        <div class="col-8">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <table class="table mb-0">
+                        <tr>
+                            <th colspan="2">
+                                <span class="h4">Недвижимость #@Model.Property.PropertyId</span>
+                                <hr />
+                                <form asp-action="Delete" asp-route-id="@Model.Property.PropertyId">
+                                    <a asp-action="Edit" asp-route-id="@Model.Property.PropertyId" class="btn btn-outline-info"><i class="fas fa-edit fa-fw"></i></a>
+                                    <button type="submit" class="btn btn-outline-info"><i class="fas fa-trash-alt  fa-fw"></i></button>
+                                </form>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style="width: 300px">@Html.DisplayNameFor(e => e.Property.PropertyTypeId)</th>
+                            <td>@Model.Property.PropertyType.Name</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(e => e.Property.CreationDate)</th>
+                            <td>@Model.Property.CreationDate.ToString("dd MMM yyyy hh:mm", new CultureInfo("ru-RU"))</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(e => e.Property.Street.District.City)</th>
+                            <td>@Model.Property.Street.District.City.Name</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(e => e.Property.Street.District)</th>
+                            <td>@Model.Property.Street.District.Name</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(e => e.Property.Street)</th>
+                            <td>@Model.Property.Street.Name</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(e => e.Property.HouseNumber)</th>
+                            <td>@Model.Property.HouseNumber</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(e => e.Property.Number)</th>
+                            <td>@Model.Property.Number</td>
+                        </tr>
+                        @if (Model.Property.Housing != null)
+                        {
+                            <tr>
+                                <th>@Html.DisplayNameFor(e => e.Property.Housing)</th>
+                                <td>@Model.Property.Housing</td>
+                            </tr>
+                        }
+
+                        @if (Model.Property.Building != null)
+                        {
+                            <tr>
+                                <th>@Html.DisplayNameFor(e => e.Property.Building)</th>
+                                <td>@Model.Property.Building</td>
+                            </tr>
+                        }
+
+                        @if (Model.Property.ApartmentNumber != null)
+                        {
+                            <tr>
+                                <th>@Html.DisplayNameFor(e => e.Property.ApartmentNumber)</th>
+                                <td>@Model.Property.ApartmentNumber</td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="card mb-2">
+                <div class="card-body">
+                    <table class="table mb-0">
+                        @if (Model.Property.AreaDescription != null)
+                        {
+                            <tr>
+                                <th colspan="2">
+                                    <span class="h4">Об участке</span>
+                                    <hr />
+                                    <form asp-action="DeleteAreaDescription" asp-route-id="@Model.Property.PropertyId">
+                                        <a asp-action="EditAreaDescription" asp-route-id="@Model.Property.PropertyId" class="btn btn-outline-info"><i class="fas fa-edit fa-fw"></i></a>
+                                        <button type="submit" class="btn btn-outline-info"><i class="fas fa-trash-alt  fa-fw"></i></button>
+                                    </form>
+                                </th>
+
+                            </tr>
+                            @if (Model.Property.AreaDescription.Area.HasValue)
+                            {
+                                <tr>
+                                    <th style="width: 300px">@Html.DisplayNameFor(e => e.Property.AreaDescription.Area)</th>
+                                    <td>@Model.Property.AreaDescription.Area.Value</td>
+                                </tr>
+                            }
+                            @if (Model.Property.AreaDescription.Electricity.HasValue)
+                            {
+                                <tr>
+                                    <th style="width: 300px">@Html.DisplayNameFor(e => e.Property.AreaDescription.Electricity)</th>
+                                    <td>@(Model.Property.AreaDescription.Electricity.Value ? "Есть" : "Нет")</td>
+                                </tr>
+                            }
+                            @if (Model.Property.AreaDescription.Water.HasValue)
+                            {
+                                <tr>
+                                    <th style="width: 300px">@Html.DisplayNameFor(e => e.Property.AreaDescription.Water)</th>
+                                    <td>@(Model.Property.AreaDescription.Water.Value ? "Есть" : "Нет")</td>
+                                </tr>
+                            }
+                            @if (Model.Property.AreaDescription.FertileSoil.HasValue)
+                            {
+                                <tr>
+                                    <th style="width: 300px">@Html.DisplayNameFor(e => e.Property.AreaDescription.FertileSoil)</th>
+                                    <td>@(Model.Property.AreaDescription.FertileSoil.Value ? "Есть" : "Нет")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <th colspan="2">
+                                    <span class="h4">Об участке</span>
+                                    <hr />
+                                    <a asp-action="AddAreaDescription" asp-route-id="@Model.Property.PropertyId" class="btn btn-outline-info"><i class="fas fa-plus fa-fw"></i></a>
+                                </th>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+
+            <div class="card  mb-2">
+                <div class="card-body ">
+                    <table class="table mb-0">
+                        <tr>
+                            @if (Model.Property.BuildingDescription != null)
+                            {
+                            <tr>
+                                <th colspan="2">
+                                    <span class="h4">О доме</span>
+                                    <hr />
+                                    <form asp-action="DeleteBuildingDescription" asp-route-id="@Model.Property.PropertyId">
+                                        <a asp-action="EditBuildingDescription" asp-route-id="@Model.Property.PropertyId" class="btn btn-outline-info"><i class="fas fa-edit fa-fw"></i></a>
+                                        <button type="submit" class="btn btn-outline-info"><i class="fas fa-trash-alt  fa-fw"></i></button>
+                                    </form>
+                                </th>
+                            </tr>
+                            @if (Model.Property.BuildingDescription.BuildYear.HasValue)
+                            {
+                                <tr>
+                                    <th style="width: 300px">@Html.DisplayNameFor(e => e.Property.BuildingDescription.BuildYear)</th>
+                                    <td>@Model.Property.BuildingDescription.BuildYear.Value</td>
+                                </tr>
+                            }
+                            @if (Model.Property.BuildingDescription.NumberOfFloors.HasValue)
+                            {
+                                <tr>
+                                    <th style="width: 300px">@Html.DisplayNameFor(e => e.Property.BuildingDescription.NumberOfFloors)</th>
+                                    <td>@Model.Property.BuildingDescription.NumberOfFloors.Value</td>
+                                </tr>
+                            }
+                            @if (Model.Property.BuildingDescription.Parking.HasValue)
+                            {
+                                <tr>
+                                    <th style="width: 300px">@Html.DisplayNameFor(e => e.Property.BuildingDescription.Parking)</th>
+                                    <td>@(Model.Property.BuildingDescription.Parking.Value ? "Есть" : "Нет")</td>
+                                </tr>
+                            }
+                            @if (Model.Property.BuildingDescription.Elevator.HasValue)
+                            {
+                                <tr>
+                                    <th style="width: 300px">@Html.DisplayNameFor(e => e.Property.BuildingDescription.Elevator)</th>
+                                    <td>@(Model.Property.BuildingDescription.Elevator.Value ? "Есть" : "Нет")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <th colspan="2">
+                                    <span class="h4">О доме</span>
+                                    <hr />
+                                    <a asp-action="AddBuildingDescription" asp-route-id="@Model.Property.PropertyId" class="btn btn-outline-info"><i class="fas fa-plus fa-fw"></i></a>
+                                </th>
+                            </tr>
+                        }
+                        </table>
+                    </div>
+                </div>
+                <div class="card  mb-2">
+                    <div class="card-body">
+                        <table class="table mb-0">
+                            @if (Model.Property.ApartmentDescription != null)
+                            {
+                                <tr>
+                                    <th colspan="2">
+                                        <span class="h4">О квартире</span>
+                                        <hr />
+                                        <form asp-action="DeleteApartmentDescription" asp-route-id="@Model.Property.PropertyId">
+                                            <a asp-action="EditApartmentDescription" asp-route-id="@Model.Property.PropertyId" class="btn btn-outline-info"><i class="fas fa-edit fa-fw"></i></a>
+                                            <button type="submit" class="btn btn-outline-info"><i class="fas fa-trash-alt  fa-fw"></i></button>
+                                        </form>
+                                    </th>
+                                </tr>
+                                @if (Model.Property.ApartmentDescription.Floor.HasValue)
+                                {
+                                    <tr>
+                                        <th style="width: 300px">@Html.DisplayNameFor(e => e.Property.ApartmentDescription.Floor)</th>
+                                        <td>@Model.Property.ApartmentDescription.Floor.Value</td>
+                                    </tr>
+                                }
+                                @if (Model.Property.ApartmentDescription.Area.HasValue)
+                                {
+                                    <tr>
+                                        <th style="width: 300px">@Html.DisplayNameFor(e => e.Property.ApartmentDescription.Area)</th>
+                                        <td>@Model.Property.ApartmentDescription.Area.Value м2</td>
+                                    </tr>
+                                }
+                                @if (Model.Property.ApartmentDescription.NumberOfRooms.HasValue)
+                                {
+                                    <tr>
+                                        <th style="width: 300px">@Html.DisplayNameFor(e => e.Property.ApartmentDescription.NumberOfRooms)</th>
+                                        <td>@Model.Property.ApartmentDescription.NumberOfRooms.Value</td>
+                                    </tr>
+                                }
+                                @if (Model.Property.ApartmentDescription.Balcony.HasValue)
+                                {
+                                    <tr>
+                                        <th style="width: 300px">@Html.DisplayNameFor(e => e.Property.ApartmentDescription.Balcony)</th>
+                                        <td>@(Model.Property.ApartmentDescription.Balcony.Value ? "Есть" : "Нет")</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <th colspan="2">
+                                        <span class="h4">О квартире</span>
+                                        <hr />
+                                        <a asp-action="AddApartmentDescription" asp-route-id="@Model.Property.PropertyId" class="btn btn-outline-info"><i class="fas fa-plus fa-fw"></i></a>
+                                    </th>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h4>Участие в продажах</h4>
+                        <hr/>
+                        <table class="table table-borderless table-sm">
+                            @foreach (var sellOrder in Model.Property.SellOrders)
+                            {
+                                <tr>
+                                    <td><a asp-controller="SellOrder" asp-action="Inspect" asp-route-id="@sellOrder.SellOrderId">@sellOrder.Number</a></td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+        </div>
+    </div>

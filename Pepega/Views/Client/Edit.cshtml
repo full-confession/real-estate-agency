@@ -1,0 +1,72 @@
+﻿@using System.Globalization
+@model Client
+@{
+    ViewData["Title"] = "Изменение клиента";
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-8">
+        <form>
+            <input type="hidden" asp-for="ClientId" />
+            <input type="hidden" asp-for="RegistrationDate" />
+            <div class="card p-3 mb-3">
+                <h5>Редактирование клиента</h5>
+                <small>Дата регистрации: @Model.RegistrationDate.ToString("dd MMM yyyy hh:mm", new CultureInfo("ru-RU"))</small>
+                <hr />
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="LastName" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="LastName" asp-placeholder-for="LastName" class="form-control" />
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="LastName"></span>
+                    </div>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="FirstName" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="FirstName" asp-placeholder-for="FirstName" class="form-control" />
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="FirstName"></span>
+                    </div>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="MiddleName" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="MiddleName" asp-placeholder-for="MiddleName" class="form-control" />
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="MiddleName"></span>
+                    </div>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="BirthDate" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="BirthDate" asp-placeholder-for="BirthDate" class="form-control" />
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="BirthDate"></span>
+                    </div>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="PassportNumber" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="PassportNumber" asp-placeholder-for="PassportNumber" class="form-control" />
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="PassportNumber"></span>
+                    </div>
+                </div>
+
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="PhoneNumber" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="PhoneNumber" asp-placeholder-for="PhoneNumber" class="form-control" />
+                </div>
+            </div>
+            <button asp-action="Edit" formmethod="post" class="btn btn-info">Сохранить</button>
+        </form>
+    </div>
+</div>

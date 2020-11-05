@@ -1,0 +1,79 @@
+﻿@using System.Globalization
+@model Pepega.Controllers.SellOrderIndexModel
+
+@{
+    ViewData["Title"] = "Клиенты";
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-12">
+        <h3>Договоры о продаже недвижимости</h3>
+        <div class="row">
+            <div class="col-4">
+                <hr />
+                <a class="btn btn-info btn-block" asp-action="Create">Добавить договор</a>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-12">
+                    <hr />
+                    <form>
+                        <div class="input-group input-group-sm mb-2">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text">Активность за период</label>
+                            </div>
+                            <input type="date" name="From" placeholder="от" class="form-control" />
+                            <input type="date" name="To" placeholder="по" class="form-control" />
+                        </div>
+                        <button type="submit" asp-action="Report" class="btn btn-outline-info">Составить репорт</button>
+                    </form>
+                    <hr />
+                </div>
+            </div>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item page-link">
+                        <a asp-action="Index" asp-route-pageIndex="1"><i class="fas fa-angle-double-left fa-fw"></i></a>
+                    </li>
+                    <li class="page-item page-link">
+                        <a asp-action="Index" asp-route-pageIndex="@(Model.PageIndex - 1)"><i class="fas fa-angle-left fa-fw"></i></a>
+                    </li>
+                    <li class="page-item page-link" style="width: 50px; text-align: center;">
+                        <a><b>@Model.PageIndex</b></a>
+                    </li>
+                    <li class="page-item page-link">
+                        <a asp-action="Index" asp-route-pageIndex="@(Model.PageIndex + 1)"><i class="fas fa-angle-right fa-fw"></i></a>
+                    </li>
+                    <li class="page-item page-link">
+                        <a asp-action="Index" asp-route-pageIndex="@Model.PageCount"><i class="fas fa-angle-double-right fa-fw"></i></a>
+                    </li>
+                </ul>
+            </nav>
+            <hr />
+            <table class="table table-bordered table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col" style="width: 70px">#</th>
+                        <th scope="col">Номер</th>
+                        <th scope="col"># Недвижимости</th>
+                        <th scope="col">Последний статус</th>
+                        <th scope="col" style="width: 200px">Дата создания</th>
+                        <th scope="col" style="width: 200px">Цена</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sellOrder in Model.SellOrders)
+                    {
+                        <tr onclick="window.open('@Url.Action("Inspect", new {id = sellOrder.SellOrderId})')">
+                            <th scope="row">@sellOrder.SellOrderId</th>
+                            <td>@sellOrder.Number</td>
+                            <td>@sellOrder.PropertyId</td>
+                            <td class="table-@sellOrder.Statuses.Last().Status.Style">@sellOrder.Statuses.Last().Status.Name</td>
+                            <td>@sellOrder.CreationDate.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</td>
+                            <td>@sellOrder.Price.ToString("N0") тыс. руб.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+</div>

@@ -1,0 +1,150 @@
+﻿@using System.Globalization
+@model Pepega.Controllers.ClientIndexModel
+
+@{
+    ViewData["Title"] = "Клиенты";
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-12">
+        <h3>Клиенты</h3>
+        <hr />
+        <div class="row">
+            <div class="col-3">
+                <a class="btn btn-info btn-block" asp-action="Create">Добавить клиента</a>
+            </div>
+        </div>
+        <hr />
+        <form id="filterForm" asp-action="Index" method="get">
+            <input type="hidden" id="filterPageIndex" asp-for="PageIndex" />
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Filters.LastName" class="input-group-text"></label>
+                        </div>
+                        <input asp-for="Filters.LastName" asp-placeholder-for="Filters.LastName" class="form-control from-reset" />
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Filters.FirstName" class="input-group-text"></label>
+                        </div>
+                        <input asp-for="Filters.FirstName" asp-placeholder-for="Filters.FirstName" class="form-control from-reset" />
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Filters.MiddleName" class="input-group-text"></label>
+                        </div>
+                        <input asp-for="Filters.MiddleName" asp-placeholder-for="Filters.MiddleName" class="form-control from-reset" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Filters.Id" class="input-group-text"></label>
+                        </div>
+                        <input asp-for="Filters.Id" asp-placeholder-for="Filters.Id" class="form-control from-reset" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Filters.PassportNumber" class="input-group-text"></label>
+                        </div>
+                        <input asp-for="Filters.PassportNumber" asp-placeholder-for="Filters.PassportNumber" class="form-control from-reset" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Filters.BirthDateFrom" class="input-group-text"></label>
+                        </div>
+                        <input asp-for="Filters.BirthDateFrom" class="form-control from-reset" />
+                        <input asp-for="Filters.BirthDateTo" class="form-control from-reset" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <label asp-for="Filters.RegistrationDateFrom" class="input-group-text"></label>
+                        </div>
+                        <input type="date" asp-for="Filters.RegistrationDateFrom" class="form-control from-reset" />
+                        <input type="date" asp-for="Filters.RegistrationDateTo" class="form-control from-reset" />
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="d-flex align-items-center mb-2">
+                <button type="button" class="btn btn-info mr-3" onclick="ApplyFilters()">Фильтровать</button>
+                <button type="button" class="btn btn-light mr-3" onclick="Clear()">Сбросить фильтры</button>
+
+                <div class="input-group" style="width: 260px;">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text">Записей на странице</label>
+                    </div>
+                    <select asp-for="PageSize" class="form-control">
+                        <option selected="selected" value="10">10</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                <div class="ml-3">
+                    Выбрано @Model.SelectedEntyCount из @Model.TotalEntryCount записей
+                </div>
+            </div>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item page-link" onclick="GoToPage(1)">
+                        <i class="fas fa-angle-double-left fa-fw"></i>
+                    </li>
+                    <li class="page-item page-link" onclick="GoToPage(@(Model.PageIndex - 1))">
+                        <i class="fas fa-angle-left fa-fw"></i>
+                    </li>
+                    <li class="page-item page-link" style="width: 50px; text-align: center;">
+                        <b>@Model.PageIndex</b>
+                    </li>
+                    <li class="page-item page-link" onclick="GoToPage(@(Model.PageIndex + 1))">
+                        <i class="fas fa-angle-right fa-fw"></i>
+                    </li>
+                    <li class="page-item page-link" onclick="GoToPage(@Model.PageCount)">
+                        <i class="fas fa-angle-double-right fa-fw"></i>
+                    </li>
+                </ul>
+            </nav>
+        </form>
+
+        <hr />
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col" style="width: 70px">#</th>
+                    <th scope="col">ФИО</th>
+                    <th scope="col" style="width: 140px">Паспорт</th>
+                    <th scope="col" style="width: 170px">Дата рождения</th>
+                    <th scope="col" style="width: 180px">Дата регистрации</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var client in Model.Clients)
+                {
+                    <tr onclick="window.open('@Url.Action("Inspect", new {id = client.ClientId})')">
+                        <th scope="row">@client.ClientId</th>
+                        <td>@client.LastName @client.FirstName @client.MiddleName</td>
+                        <td>@client.PassportNumber</td>
+                        <td>@client.BirthDate.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</td>
+                        <td>@client.RegistrationDate.ToString("dd MMM yyyy", new CultureInfo("ru-RU"))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

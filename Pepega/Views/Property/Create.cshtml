@@ -1,0 +1,86 @@
+﻿@using System.Globalization
+@model Pepega.Controllers.PropertyEditModel
+@{
+    ViewData["Title"] = "Добавление недвижимости";
+}
+
+<div class="row justify-content-md-center">
+    <div class="col-8">
+        <form>
+            <div class="card p-3 mb-3">
+                <h5>Добавление новой недвижимости</h5>
+                <hr />
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.PropertyTypeId" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <select asp-for="Property.PropertyTypeId" asp-items="Model.PropertyTypeList" class="form-control"></select>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.Street.District.City" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <select id="citySelect" asp-items="Model.CityList" class="form-control">
+                        <option selected="selected" hidden>Город</option>
+                    </select>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.Street.District" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <select id="districtSelect" class="form-control" disabled="disabled">
+                        <option selected="selected" hidden="hidden">Район</option>
+                    </select>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.Street" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <select id="streetSelect" asp-for="Property.StreetId" class="form-control" disabled="disabled">
+                        <option selected="selected" hidden="hidden">Улица</option>
+                    </select>
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="Property.StreetId"></span>
+                    </div>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.HouseNumber" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="Property.HouseNumber" asp-placeholder-for="Property.HouseNumber" class="form-control" />
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="Property.HouseNumber"></span>
+                    </div>
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.Housing" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="Property.Housing" asp-placeholder-for="Property.Housing" class="form-control" />
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.Building" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="Property.Building" asp-placeholder-for="Property.Building" class="form-control" />
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.ApartmentNumber" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="Property.ApartmentNumber" asp-placeholder-for="Property.ApartmentNumber" class="form-control" />
+                </div>
+                <div class="input-group input-group-sm mb-2">
+                    <div class="input-group-prepend">
+                        <label asp-for="Property.Number" class="input-group-text" style="width: 150px"></label>
+                    </div>
+                    <input asp-for="Property.Number" asp-placeholder-for="Property.Number" class="form-control" />
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="Property.Number"></span>
+                    </div>
+                </div>
+            </div>
+            <button asp-action="Create" formmethod="post" class="btn btn-info">Добавить</button>
+        </form>
+    </div>
+</div>
